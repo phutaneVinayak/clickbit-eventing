@@ -1,0 +1,54 @@
+apiVersion: serving.knative.dev/v1	
+kind: Service
+metadata:
+  name: eventing-app
+  namespace: knative-eventing
+  annotations:
+    networking.knative.dev/visibility: cluster-local
+    #  autoscaling.knative.dev/maxScale:  "20"
+    #  autoscaling.knative.dev/minScale:  "0"
+spec:
+  template:
+    spec:
+      containers:
+        - image: phutanevinayakdocker/eventing:latest  #962734494488.dkr.ecr.us-west-2.amazonaws.com/bic/dev-cli-apps:cli-677adfe2-44ff-4e40-a3c3-cd88dbb68e6f-1
+          #env:
+          # - name: PORT
+          #   value: "8080"
+          # - name: POD_NAMESPACE
+          #   value: "cli-apps-deploy"
+          # - name: K_CONFIG_TRACING
+          #   value: '{"backend":"zipkin","debug":"true","zipkin-endpoint":"http://otel-collector.observability:9411/api/v2/spans"}'
+          # - name: CLI_EXECUTION_TIMEOUT
+          #   value: "5"
+          # resources:
+          #   requests:
+          #     cpu: 1
+          #     memory: 128M
+          #   limits:
+          #     cpu: 2
+          #     memory: 256M
+          # ports:
+          #   - containerPort: 8080
+          # livenessProbe:
+          #   httpGet:
+          #     path: /live
+          #     #port: 8080
+          #   failureThreshold: 3
+          #   initialDelaySeconds: 10
+          #   # # Allow sufficient amount of time (90 seconds = periodSeconds * failureThreshold)
+          #   # # for the registered shutdown handlers to run to completion.
+          #   periodSeconds: 5
+          #   successThreshold: 1
+          #   # # Setting a very low timeout value (e.g. 1 second) can cause false-positive
+          #   # # checks and service interruption.
+          #   timeoutSeconds: 20
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     #port: 8080
+          #   failureThreshold: 3
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 5
+          #   successThreshold: 1
+          #   timeoutSeconds: 20

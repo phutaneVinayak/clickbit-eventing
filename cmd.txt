@@ -1,0 +1,19 @@
+//instal kafka in minikube 
+
+kubectl create namespace kafka
+
+kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+
+
+kubectl -n kafka  get kafkatopics
+
+kubectl api-resources --api-group='kafka.strimzi.io'
+
+// processing kafka msg sent/receive 
+kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.32.0-kafka-3.3.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --bootstrap-server kafka-cluster-kafka-bootstrap:9092 --topic event-queue
+
+kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.32.0-kafka-3.3.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server kafka-cluster-kafka-bootstrap:9092 --topic event-queue --from-beginning
+
+
+// Pass in any running ubutnu pod for everthing verification 
+curl http://kafka-broker-ingress.knative-eventing.svc.cluster.local/knative-eventing/kafka-event-broker  -X POST     -H "content-type: application/json"      -H "ce-specversion: 1.0"      -H "ce-source: curl-command"      -H "ce-type: curl.demo"      -H "ce-id: 123-abc"      -d '{"name":"Vinayak Phutane"}' 
