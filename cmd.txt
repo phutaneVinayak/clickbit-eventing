@@ -16,4 +16,18 @@ kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.32.0-kaf
 
 
 // Pass in any running ubutnu pod for everthing verification 
-curl http://kafka-broker-ingress.knative-eventing.svc.cluster.local/knative-eventing/kafka-event-broker  -X POST     -H "content-type: application/json"      -H "ce-specversion: 1.0"      -H "ce-source: curl-command"      -H "ce-type: curl.demo"      -H "ce-id: 123-abc"      -d '{"name":"Vinayak Phutane"}' 
+
+
+
+curl http://kafka-broker-ingress.knative-eventing.svc.cluster.local/knative-eventing/kafka-event-broker  -X POST     -H "content-type: application/json"      -H "ce-specversion: 1.0"      -H "ce-source: curl-command"      -H "ce-type: curl.demo"      -H "ce-id: 123-abc"      -d '{"name":"Vinayak Phutane"}'
+
+
+
+curl http://eventing-app.knative-eventing.127.0.0.1.sslip.io  -X POST     -H "content-type: application/json"      -H "ce-specversion: 1.0"      -H "ce-source: curl-command"      -H "ce-type: curl.demo"      -H "ce-id: 123-abc"      -d '{"name":"Vinayak Phutane"}'
+
+
+// getting logs from the container
+kubectl logs -f -l app=eventing-app-00001 -n knative-eventing -c user-container 
+
+// pulsar installtion follow below steps
+https://pulsar.apache.org/docs/2.10.x/getting-started-helm/

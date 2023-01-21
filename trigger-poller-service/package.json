@@ -23,6 +23,7 @@
     "cloudevents": "^6.0.3",
     "express": "^4.18.2",
     "kafka-node": "^5.0.0",
+    "kafkajs": "^2.2.3",
     "mongodb": "^4.13.0",
     "path": "^0.12.7"
   }

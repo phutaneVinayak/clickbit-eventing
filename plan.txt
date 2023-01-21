@@ -1,3 +1,46 @@
 first creating backend thing
 
 way to handle all load in nodejs event filter by event filter
+
+basic need
+start minikube with below configuration
+minikube start -p knative-eventing --cpus=7 --memory=9160
+
+#after starting the minikube install knative-eventing and knative-serving as per below docs
+Note: If you have already installed then you can skip this section
+knative-serving ---> https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/
+knative-eventing --> https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/
+
+After successfull installation of knative section install strimzi-cluster for kafka cluster
+Note: go thourgh the below links for installing kafka in minikube cluster. Don't forget to change the kafka server name to "kafka-cluster-kafka". 
+If you are not changing the name then go to external-packages folder --> open --> kafka-configMap.yaml file and change as below 
+bootstrap.servers: "the-name-of-your-kafka-cluster-bootstrap.kafka:9092"
+
+https://strimzi.io/quickstarts/
+
+#Asuming everything install correctly now we can proceed for further installtion
+
+#creating kafka broker
+#nagivate to cd external-packages foler and perform below action
+kubectl apply -f kafka-configMap.yaml
+kubectl apply -f knativeKafkaBroker.yaml
+
+#create kafka topic
+kubectl apply -f kafkaTopic.yaml
+
+#enabling kafka for knative-eventing 
+kubectl apply -f knativeEventingKafka.yaml
+
+#creating knative kafka trigger
+kubectl apply -f ../knEventService.yaml
+kubectl apply -f kafka-trigger.yaml
+
+#create trigger poller which poll on every 30 sec
+kubectl apply -f ./trigger-poller-sevice/triggerDeployment.yaml
+
+#creating engine for listening trigger job push in kafka
+kubectl apply -f ./engine-service/engineDeployment.yaml
+
+#monitor logs in knative eventing-eventing eventing-app pod
+
+kubectl logs -f -l app=eventing-app-0001 -n knative-eventing -c user-container
